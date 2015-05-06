@@ -1,8 +1,7 @@
 package de.valeryoster.geoquiz;
 
-/**
- * Created by Aleksejew on 23.04.15.
- */
+import android.os.Bundle;
+
 public class TrueFalse {
     private int mQuestion;
     private boolean mTrueQuestion;
@@ -28,4 +27,6 @@ public class TrueFalse {
     public void setTrueQuestion(boolean mTrueQuestion) {
         this.mTrueQuestion = mTrueQuestion;
     }
+
+
 }

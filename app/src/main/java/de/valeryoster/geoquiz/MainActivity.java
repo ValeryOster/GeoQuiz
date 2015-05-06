@@ -19,6 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private Button mNextButton;
     private TextView mQuestionTextView;
     public static final String TAG = "QuizActivity";
+    public static final String KEY_INDEX= "index";
 
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
             new TrueFalse(R.string.question_oceans, true),
@@ -33,15 +34,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG,"onCreat(bundle) called");
+        Log.d(TAG, "onCreat(bundle) called");
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
-        updateQuestion();
+
 
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
             }
         });
@@ -62,6 +64,17 @@ public class MainActivity extends ActionBarActivity {
                 checkAnswer(false);
             }
         });
+
+
+
+        //Prüfen ob in saveInstance geendert worden.
+        //wenn true, dann index endern
+        if(savedInstanceState != null)
+        {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
+        updateQuestion();
+
     }
 
 
@@ -87,6 +100,18 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //Speichern Index, wenn device gedreht worden
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+
+        //Hier wird den Index gespeichert
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
+
     private void updateQuestion()
     {
         mCurrentIndex = (mCurrentIndex +1) % mQuestionBank.length;
@@ -107,6 +132,7 @@ public class MainActivity extends ActionBarActivity {
         Toast.makeText(MainActivity.this, messageId, Toast.LENGTH_SHORT).show();
 
     }
+
 
     @Override
     public void onStart() {
